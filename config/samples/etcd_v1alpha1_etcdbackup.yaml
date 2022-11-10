@@ -1,0 +1,17 @@
+apiVersion: etcd.ydzs.io/v1alpha1
+kind: EtcdBackup
+metadata:
+  name: etcdbackup-sample
+spec:
+  etcdUrl: "http://etcd-demo-0.etcd-demo.svc.cluster.local:2379"  # 备份的节点 etcd 地址
+  storageType: s3  # 指定备份类型
+  s3:
+    path: "ydzsio/{{ .Namespace }}/{{ .Name }}/{{ .CreationTimestamp }}/snapshot.db"  # 数据存放目录 格式： <bucket>/<object path>
+    endpoint: "play.min.io" # MINIO的地址
+    secret: "minio-access-secret"   # 包含 accessKeyID 与 secretAccessKey
+  oss:
+    path: "foo-bucket/snapshot.db"
+    secret: "secret"
+
+
+#kubectl create secret generic minio-access-secret --from-literal=MINIO_ACCESS_KEY=Q3AM3UQ867SPQQA43P2F --from-literal=MINIO_SECRET_KEY=zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG
